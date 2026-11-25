@@ -61,16 +61,34 @@ MIT 6.828 教材《xv6: a simple, Unix-like teaching operating system》（x86 �
 
 ## 本地构建
 
+构建有严格的先后顺序：正文与源码页共用同一份 Shiki 高亮缓存，若跳过数据生成直接高亮，页面会停留在上一版内容。
+
 ```bash
 npm install
+
+# 1. 正文：解析 troff → 重建行号映射 → 渲染插图 → 高亮代码 → 生成页面
 python3 tools/parse.py && python3 tools/lines.py
-python3 tools/figures.py          # 需本机 Chrome
+python3 tools/figures.py            # 需本机 Chrome
 node tools/highlight.mjs
 python3 tools/build.py
-python3 tools/srctranslate.py && python3 tools/srcpages.py
-node tools/highlight.mjs && python3 tools/srcrender.py
+
+# 2. 源码：回填注释译文 → 生成行号与元数据 → 高亮 → 渲染页面
+python3 tools/srctranslate.py
+python3 tools/srcpages.py
+node tools/highlight.mjs
+python3 tools/srcrender.py
+
+# 3. 构建与预览
 npx vitepress build docs
-npx vitepress dev docs            # 本地预览
+npx vitepress dev docs
+```
+
+校验脚本：
+
+```bash
+python3 tools/verify_src.py         # 代码逐字节一致、注释条数对齐
+python3 tools/check.py              # 章节段落数与图表数对齐原文
+python3 tools/check_anchors.py      # 线上内部锚点可达性
 ```
 
 ## 许可
