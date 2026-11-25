@@ -43,6 +43,12 @@ MIT 6.828 教材《xv6: a simple, Unix-like teaching operating system》（x86 �
     ├── figures.py      SVG → 裁边 PNG
     ├── srcextract.py   抽取源码注释
     ├── srctranslate.py 回填注释译文（保持行数不变）
+    ├── figzh.py        生成中文重绘插图（复用原图矢量几何）
+    ├── figtext.py      抽取插图文字
+    ├── figzh.py        生成中文重绘插图（复用原图矢量几何）
+    ├── figtext.py      抽取插图文字
+    ├── figzh.py        生成中文重绘插图（复用原图矢量几何）
+    ├── figtext.py      抽取插图文字
     ├── srcpages.py     生成源码页数据
     ├── srcrender.py    渲染源码页
     ├── highlight.mjs   Shiki 双主题高亮
@@ -66,9 +72,10 @@ MIT 6.828 教材《xv6: a simple, Unix-like teaching operating system》（x86 �
 ```bash
 npm install
 
-# 1. 正文：解析 troff → 重建行号映射 → 渲染插图 → 高亮代码 → 生成页面
+# 1. 正文：解析 troff → 重建行号映射 → 渲染插图（含中文重绘） → 高亮代码 → 生成页面
 python3 tools/parse.py && python3 tools/lines.py
-python3 tools/figures.py            # 需本机 Chrome
+python3 tools/figures.py            # 原图，需本机 Chrome
+python3 tools/figzh.py              # 中文重绘图
 node tools/highlight.mjs
 python3 tools/build.py
 
